@@ -14,8 +14,10 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import s3534890.com.eventplanner.Controller.AddNewEventButtonController;
+import s3534890.com.eventplanner.Controller.DatePickerController;
 import s3534890.com.eventplanner.Controller.RecyclerViewAdapter;
 import s3534890.com.eventplanner.R;
 
@@ -23,8 +25,11 @@ public class MainActivity extends AppCompatActivity {
 
     private AlertDialog.Builder builder;
     private View dialogView;
+    public static TextView startDate;
+    public static TextView endDate;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
         // initialise dialog
         dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_view,null);
         builder = new AlertDialog.Builder(this);
@@ -49,7 +56,9 @@ public class MainActivity extends AppCompatActivity {
         // set the adapter and layout manager
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        if (recyclerView != null) {
+            recyclerView.setLayoutManager(linearLayoutManager);
+        }
         recyclerView.setAdapter(new RecyclerViewAdapter(this));
     }
 
@@ -67,6 +76,12 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.add_event_button) {
+
+            startDate = (TextView) dialogView.findViewById(R.id.dialog_view_start_date);
+            endDate = (TextView) dialogView.findViewById(R.id.dialog_view_end_date);
+            startDate.setOnClickListener(new DatePickerController());
+            endDate.setOnClickListener(new DatePickerController());
+
 
             builder.setMessage("Add New Event");
             builder.setView(dialogView);
