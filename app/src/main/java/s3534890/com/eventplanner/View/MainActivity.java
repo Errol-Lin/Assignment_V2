@@ -3,15 +3,21 @@ package s3534890.com.eventplanner.View;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import s3534890.com.eventplanner.Controller.AddNewEventButtonController;
 import s3534890.com.eventplanner.R;
 
 public class MainActivity extends AppCompatActivity {
+
+    private AlertDialog.Builder builder;
+    private View dialogView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_view,null);
+        builder = new AlertDialog.Builder(this);
     }
 
     @Override
@@ -39,13 +48,19 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.add_event_button) {
+
+            builder.setMessage("Add New Event");
+            builder.setView(dialogView);
+            builder.setPositiveButton("Add",new AddNewEventButtonController());
+            builder.setNegativeButton("Cancel",null);
+            AlertDialog alert = builder.create();
+            alert.show();
+
             return true;
         }
 

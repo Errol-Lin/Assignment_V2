@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:hint="Enter Event Title"
+        android:id="@+id/dialog_view_title_text"
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/dialog_view_start_date"
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
+        android:hint="Select Start Date" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/dialog_view_end_date"
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
+        android:hint="Select End Date" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/dialog_view_venue"
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
+        android:hint="Select Venue" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/dialog_view_note"
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
+        android:hint="Enter Notes" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/dialog_view_attendee"
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
+        android:hint="Select Attendees" />
+</LinearLayout>
