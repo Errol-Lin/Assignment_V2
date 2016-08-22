@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_view,null);
         builder = new AlertDialog.Builder(this);
 
+        // set the adapter and layout manager
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(linearLayoutManager);
