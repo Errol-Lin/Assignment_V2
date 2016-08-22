@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 
 import s3534890.com.eventplanner.Controller.AddNewEventButtonController;
 import s3534890.com.eventplanner.R;
@@ -59,7 +60,13 @@ public class MainActivity extends AppCompatActivity {
             builder.setPositiveButton("Add",new AddNewEventButtonController());
             builder.setNegativeButton("Cancel",null);
             AlertDialog alert = builder.create();
-            alert.show();
+
+            if(dialogView.getParent() != null){
+                ((ViewGroup)dialogView.getParent()).removeView(dialogView);
+            }else{
+                alert.show();
+            }
+
 
             return true;
         }

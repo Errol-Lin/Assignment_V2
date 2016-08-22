@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -19,7 +19,9 @@
         android:id="@+id/dialog_view_start_date"
         android:layout_gravity="center_horizontal"
         android:textAlignment="center"
-        android:hint="Select Start Date" />
+        android:hint="Select Start Date"
+        android:clickable="false"
+        android:editable="false" />
 
     <TextView
         android:layout_width="match_parent"
@@ -39,7 +41,7 @@
         android:textAlignment="center"
         android:hint="Select Venue" />
 
-    <TextView
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
