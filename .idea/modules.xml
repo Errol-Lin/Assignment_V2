@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Assignment_V2.iml" filepath="$PROJECT_DIR$/Assignment_V2.iml" />
       <module fileurl="file://$PROJECT_DIR$/EventPlanner.iml" filepath="$PROJECT_DIR$/EventPlanner.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

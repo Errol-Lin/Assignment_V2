@@ -10,7 +10,8 @@
         android:hint="Enter Event Title"
         android:id="@+id/dialog_view_title_text"
         android:layout_gravity="center_horizontal"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:clickable="false" />
 
     <TextView
         android:layout_width="match_parent"
