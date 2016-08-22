@@ -5,6 +5,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +16,15 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import s3534890.com.eventplanner.Controller.AddNewEventButtonController;
+import s3534890.com.eventplanner.Controller.RecyclerViewAdapter;
 import s3534890.com.eventplanner.R;
 
 public class MainActivity extends AppCompatActivity {
 
     private AlertDialog.Builder builder;
     private View dialogView;
+    private RecyclerView recyclerView;
+    private LinearLayoutManager linearLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +42,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // initialise dialog
         dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_view,null);
         builder = new AlertDialog.Builder(this);
+
+        linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(new RecyclerViewAdapter(this));
     }
 
     @Override
@@ -63,14 +75,11 @@ public class MainActivity extends AppCompatActivity {
 
             if(dialogView.getParent() != null){
                 ((ViewGroup)dialogView.getParent()).removeView(dialogView);
-            }else{
-                alert.show();
             }
-
+            alert.show();
 
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
