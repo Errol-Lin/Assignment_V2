@@ -14,11 +14,14 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import s3534890.com.eventplanner.Controller.AddNewEventButtonController;
 import s3534890.com.eventplanner.Controller.DatePickerController;
+import s3534890.com.eventplanner.Controller.DialogViewController;
 import s3534890.com.eventplanner.Controller.RecyclerViewAdapter;
+import s3534890.com.eventplanner.Controller.TimePickerController;
 import s3534890.com.eventplanner.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,6 +30,13 @@ public class MainActivity extends AppCompatActivity {
     private View dialogView;
     public static TextView startDate;
     public static TextView endDate;
+    public static TextView startTime;
+    public static TextView endTime;
+    public static EditText eventTitle;
+    public static TextView venue;
+    public static TextView location;
+    public static EditText eventNote;
+    public static TextView attendees;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
 
@@ -79,9 +89,21 @@ public class MainActivity extends AppCompatActivity {
 
             startDate = (TextView) dialogView.findViewById(R.id.dialog_view_start_date);
             endDate = (TextView) dialogView.findViewById(R.id.dialog_view_end_date);
+            startTime = (TextView) dialogView.findViewById(R.id.dialog_view_start_time);
+            endTime = (TextView) dialogView.findViewById(R.id.dialog_view_end_time);
+            eventTitle = (EditText) dialogView.findViewById(R.id.dialog_view_title_text);
+            venue = (TextView) dialogView.findViewById(R.id.dialog_view_venue);
+            location = (TextView) dialogView.findViewById(R.id.dialog_view_location);
+            eventNote = (EditText) dialogView.findViewById(R.id.dialog_view_note);
+            attendees = (TextView) dialogView.findViewById(R.id.dialog_view_attendee);
+
             startDate.setOnClickListener(new DatePickerController());
             endDate.setOnClickListener(new DatePickerController());
+            startTime.setOnClickListener(new TimePickerController());
+            endTime.setOnClickListener(new TimePickerController());
 
+//            DialogViewController dialogViewController = new DialogViewController();
+//            dialogViewController.show(getSupportFragmentManager(),"Add New Event");
 
             builder.setMessage("Add New Event");
             builder.setView(dialogView);
