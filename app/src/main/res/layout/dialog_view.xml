@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:hint="Enter Event Title"
+        android:hint="@string/enter_event_title"
         android:id="@+id/dialog_view_title_text"
         android:layout_gravity="center_horizontal"
         android:textAlignment="center"
@@ -20,7 +20,7 @@
         android:id="@+id/dialog_view_start_date"
         android:layout_gravity="center_horizontal"
         android:textAlignment="center"
-        android:hint="Select Start Date"
+        android:hint="@string/select_start_date"
         android:clickable="false"
         android:editable="false" />
 
@@ -31,7 +31,7 @@
         android:id="@+id/dialog_view_start_time"
         android:layout_gravity="center_horizontal"
         android:textAlignment="center"
-        android:hint="Select Start Time"
+        android:hint="@string/select_start_time"
         android:clickable="false"
         android:editable="false" />
 
@@ -42,7 +42,7 @@
         android:id="@+id/dialog_view_end_date"
         android:layout_gravity="center_horizontal"
         android:textAlignment="center"
-        android:hint="Select End Date" />
+        android:hint="@string/select_end_date" />
 
     <TextView
         android:layout_width="match_parent"
@@ -51,7 +51,7 @@
         android:id="@+id/dialog_view_end_time"
         android:layout_gravity="center_horizontal"
         android:textAlignment="center"
-        android:hint="Select End Time"
+        android:hint="@string/select_end_time"
         android:clickable="false"
         android:editable="false" />
 
@@ -62,7 +62,7 @@
         android:id="@+id/dialog_view_venue"
         android:layout_gravity="center_horizontal"
         android:textAlignment="center"
-        android:hint="Select Venue" />
+        android:hint="@string/select_venue" />
 
     <TextView
         android:layout_width="match_parent"
@@ -71,7 +71,7 @@
         android:id="@+id/dialog_view_location"
         android:layout_gravity="center_horizontal"
         android:textAlignment="center"
-        android:hint="Location" />
+        android:hint="@string/location" />
 
     <EditText
         android:layout_width="match_parent"
@@ -80,7 +80,7 @@
         android:id="@+id/dialog_view_note"
         android:layout_gravity="center_horizontal"
         android:textAlignment="center"
-        android:hint="Enter Notes"
+        android:hint="@string/enter_notes"
         android:singleLine="true"/>
 
     <TextView
@@ -90,5 +90,5 @@
         android:id="@+id/dialog_view_attendee"
         android:layout_gravity="center_horizontal"
         android:textAlignment="center"
-        android:hint="Select Attendees" />
+        android:hint="@string/select_attendees" />
 </LinearLayout>

@@ -1,5 +1,6 @@
 package s3534890.com.eventplanner.View;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,6 +18,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import s3534890.com.eventplanner.Controller.AddNewEventButtonController;
 import s3534890.com.eventplanner.Controller.DatePickerController;
 import s3534890.com.eventplanner.Controller.DialogViewController;
@@ -107,7 +110,14 @@ public class MainActivity extends AppCompatActivity {
 
             builder.setMessage("Add New Event");
             builder.setView(dialogView);
-            builder.setPositiveButton("Add",new AddNewEventButtonController());
+            builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    RealmConfiguration config = new RealmConfiguration.Builder(getApplication()).build();
+                    Realm.setDefaultConfiguration(config);
+                    Realm realm = Realm.getDefaultInstance();
+                }
+            });
             builder.setNegativeButton("Cancel",null);
             AlertDialog alert = builder.create();
 
