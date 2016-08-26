@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="30dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/view_detail_title"
+        android:layout_centerHorizontal="true"
+        android:textSize="15sp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/view_detail_start_date"
+        android:layout_centerHorizontal="true"
+        android:textSize="15sp"
+        android:layout_below="@id/view_detail_title"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/view_detail_start_time"
+        android:layout_centerHorizontal="true"
+        android:textSize="15sp"
+        android:layout_below="@id/view_detail_start_date"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/view_detail_end_date"
+        android:layout_centerHorizontal="true"
+        android:textSize="15sp"
+        android:layout_below="@id/view_detail_start_time"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/view_detail_end_time"
+        android:layout_centerHorizontal="true"
+        android:textSize="15sp"
+        android:layout_below="@id/view_detail_end_date"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/view_detail_venue"
+        android:layout_centerHorizontal="true"
+        android:textSize="15sp"
+        android:layout_below="@id/view_detail_end_time"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/view_detail_location"
+        android:layout_centerHorizontal="true"
+        android:textSize="15sp"
+        android:layout_below="@id/view_detail_venue"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/view_detail_note"
+        android:layout_centerHorizontal="true"
+        android:textSize="15sp"
+        android:layout_below="@id/view_detail_location"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/view_detail_attendee"
+        android:layout_centerHorizontal="true"
+        android:textSize="15sp"
+        android:layout_below="@id/view_detail_note"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/view_detail_done_button"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/view_detail_attendee"
+        android:text="Done"/>
+
+</RelativeLayout>

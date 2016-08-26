@@ -3,8 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".View.MainActivity">
     <item
+        android:icon="@drawable/ic_action_add"
         android:id="@+id/add_event_button"
         android:orderInCategory="100"
         android:title="@string/new_event_setting"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_view_in_calendar"
+        android:title="View In Calendar"
+        app:showAsAction="never"></item>
+
+    <item
+        android:id="@+id/menu_sorting_asc"
+        android:title="Sort By Date Asc"
+        app:showAsAction="never"></item>
+
+    <item
+        android:id="@+id/menu_sorting_desc"
+        android:title="Sort By Date Desc"
+        app:showAsAction="never"></item>
+
+
 </menu>

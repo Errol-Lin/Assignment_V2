@@ -1,29 +1,48 @@
 package s3534890.com.eventplanner.Controller;
 
+import android.app.usage.UsageEvents;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+import s3534890.com.eventplanner.Model.Events;
 import s3534890.com.eventplanner.R;
 
 /**
  * Created by Errol&BeiBei on 22/08/2016.
  */
-public class RecyclerViewAdapter extends RecyclerView.Adapter<ListRowViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ListRowViewHolder> implements SwipeInterface {
 
+    private DetailViewListener detailListener;
     private LayoutInflater mInflater;
-    private static ArrayList<String> mItems;
+    public static RealmResults<Events> mResults;
+    private Realm realm;
 
-    public RecyclerViewAdapter(Context context){
-
+    // constructor
+    public RecyclerViewAdapter(Context context,Realm realm,RealmResults<Events> results){
         // need a inflater to convert xml into java
         mInflater = LayoutInflater.from(context);
-        generateValue();
+        this.realm = realm;
+        update(results);
+
+    }
+    public RecyclerViewAdapter(Context context,Realm realm,RealmResults<Events> results,DetailViewListener listener){
+        // need a inflater to convert xml into java
+        mInflater = LayoutInflater.from(context);
+        this.realm = realm;
+        detailListener = listener;
+        update(results);
+
     }
 
     @Override
@@ -31,26 +50,67 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ListRowViewHolder>
         // convert the xml into view
         View view = mInflater.inflate(R.layout.list_row,parent,false);
 
-        ListRowViewHolder vh = new ListRowViewHolder(view);
+        ListRowViewHolder vh = new ListRowViewHolder(view,detailListener);
         return vh;
     }
 
     @Override
     public void onBindViewHolder(ListRowViewHolder holder, int position) {
-        holder.eventTitle.setText(mItems.get(position));
+        Events event = mResults.get(position);
+        Date date = new Date(event.getStartDate());
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy");
+        holder.eventTitle.setText(event.getEventName());
+        holder.startDate.setText(df.format(date));
+        holder.startTime.setText("Start Time: " + event.getStartTime());
+        holder.attendee.setText("Attendee: " + event.getAttendees());
     }
 
     @Override
     public int getItemCount() {
-        return 100;
+        return mResults.size();
     }
 
-    // testing
-    public static ArrayList<String> generateValue(){
-        mItems = new ArrayList<String>();
-        for(int i = 0; i < 101; i++){
-            mItems.add("Item " + i);
+    public void update(RealmResults<Events> results){
+        mResults = results;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void onSwipe(int position){
+        realm.beginTransaction();
+        mResults.get(position).deleteFromRealm();
+        realm.commitTransaction();
+        notifyItemRemoved(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        if(position< mResults.size()){
+            return mResults.get(position).getStartDate();
         }
-        return mItems;
+        return RecyclerView.NO_ID;
+    }
+
+    public static class ListRowViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        protected TextView eventTitle;
+        protected TextView startDate;
+        protected TextView startTime;
+        protected TextView attendee;
+        DetailViewListener detailViewListener;
+
+        public ListRowViewHolder(View itemView,DetailViewListener listener) {
+            super(itemView);
+            itemView.setOnClickListener(this);
+            detailViewListener = listener;
+            eventTitle = (TextView) itemView.findViewById(R.id.list_row_event_title);
+            startDate = (TextView) itemView.findViewById(R.id.list_row_start_date);
+            startTime = (TextView) itemView.findViewById(R.id.list_row_start_time);
+            attendee = (TextView) itemView.findViewById(R.id.list_row_attendee);
+        }
+
+        @Override
+        public void onClick(View view) {
+            detailViewListener.onDetailView(getAdapterPosition());
+        }
     }
 }
