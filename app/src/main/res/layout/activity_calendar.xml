@@ -10,14 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:background="#343434"
+        android:background="#B691FF"
         android:orientation="vertical" >
 
         <LinearLayout
             android:id="@+id/header"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="#78C165"
+            android:background="#68EFAD"
             android:gravity="center"
             android:orientation="horizontal"
             android:padding="10dp" >
@@ -169,7 +169,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:background="#343434"
+            android:background="#B691FF"
             android:orientation="vertical" >
 
         </LinearLayout>

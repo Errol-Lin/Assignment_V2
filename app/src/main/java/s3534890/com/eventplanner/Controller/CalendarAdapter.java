@@ -120,9 +120,9 @@ public class CalendarAdapter extends BaseAdapter {
 
         if (day_string.get(position).equals(curentDateString)) {
 
-            v.setBackgroundColor(Color.CYAN);
+            v.setBackgroundColor(Color.parseColor("#68EFAD"));
         } else {
-            v.setBackgroundColor(Color.parseColor("#343434"));
+            v.setBackgroundColor(Color.parseColor("#B691FF"));
         }
 
 
@@ -155,10 +155,10 @@ public class CalendarAdapter extends BaseAdapter {
 
     public View setSelected(View view,int pos) {
         if (previousView != null) {
-            previousView.setBackgroundColor(Color.parseColor("#343434"));
+            previousView.setBackgroundColor(Color.parseColor("#B691FF"));
         }
 
-        view.setBackgroundColor(Color.CYAN);
+        view.setBackgroundColor(Color.parseColor("#68EFAD"));
 
         int len=day_string.size();
         if (len>pos) {
@@ -240,7 +240,7 @@ public class CalendarAdapter extends BaseAdapter {
             if (len1>pos) {
 
                 if (day_string.get(pos).equals(date)) {
-                    v.setBackgroundColor(Color.parseColor("#343434"));
+                    v.setBackgroundColor(Color.parseColor("#B691FF"));
                     v.setBackgroundResource(R.drawable.rounded_calendar_item);
 
                     txt.setTextColor(Color.WHITE);
@@ -269,19 +269,13 @@ public class CalendarAdapter extends BaseAdapter {
                         .setTitle("Date: "+event_date)
                         .setMessage("Event: "+event_message)
                         .setPositiveButton("OK",new android.content.DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int which)
-                            {
+                            public void onClick(DialogInterface dialog, int which) {
                                 act.finish();
                             }
                         }).show();
                 break;
             }else{
-
-
-            }}
-
-
+            }
+        }
     }
-
-
 }

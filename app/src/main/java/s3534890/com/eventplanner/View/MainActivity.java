@@ -14,7 +14,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
@@ -22,9 +21,8 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.StringTokenizer;
 import java.util.UUID;
@@ -33,6 +31,7 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import s3534890.com.eventplanner.Controller.CalendarCollection;
 import s3534890.com.eventplanner.Controller.DatePickerController;
 import s3534890.com.eventplanner.Controller.DetailViewListener;
 import s3534890.com.eventplanner.Controller.RecyclerViewAdapter;
@@ -95,6 +94,7 @@ public class MainActivity extends AppCompatActivity{
                 }
             });
         }
+        CalendarCollection.date_collection_arr = new ArrayList<>();
 
         // construct the realm db
         realm = Realm.getDefaultInstance();

@@ -58,11 +58,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(ListRowViewHolder holder, int position) {
         Events event = mResults.get(position);
         Date date = new Date(event.getStartDate());
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy");
+        SimpleDateFormat df1 = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd");
         holder.eventTitle.setText(event.getEventName());
-        holder.startDate.setText(df.format(date));
+        holder.startDate.setText(df1.format(date));
         holder.startTime.setText("Start Time: " + event.getStartTime());
         holder.attendee.setText("Attendee: " + event.getAttendees());
+        CalendarCollection.date_collection_arr.add(new CalendarCollection(df2.format(date),event.getEventName()));
     }
 
     @Override

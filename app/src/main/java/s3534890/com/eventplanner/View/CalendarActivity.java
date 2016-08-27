@@ -44,6 +44,15 @@ public class CalendarActivity extends Activity {
             }
         });
 
+        ImageButton next = (ImageButton) findViewById(R.id.Ib_next);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setNextMonth();
+                refreshCalendar();
+            }
+        });
+
         GridView gridView = (GridView) findViewById(R.id.gv_calendar);
         gridView.setAdapter(cal_adapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -80,7 +89,6 @@ public class CalendarActivity extends Activity {
             cal_month.set(GregorianCalendar.MONTH,
                     cal_month.get(GregorianCalendar.MONTH) + 1);
         }
-
     }
 
     protected void setPreviousMonth() {
@@ -92,7 +100,6 @@ public class CalendarActivity extends Activity {
             cal_month.set(GregorianCalendar.MONTH,
                     cal_month.get(GregorianCalendar.MONTH) - 1);
         }
-
     }
 
     public void refreshCalendar() {
