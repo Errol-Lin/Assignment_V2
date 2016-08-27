@@ -64,7 +64,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.startDate.setText(df1.format(date));
         holder.startTime.setText("Start Time: " + event.getStartTime());
         holder.attendee.setText("Attendee: " + event.getAttendees());
-        CalendarCollection.date_collection_arr.add(new CalendarCollection(df2.format(date),event.getEventName()));
+        Events.events_collection.add(event);
     }
 
     @Override
@@ -81,6 +81,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onSwipe(int position){
         realm.beginTransaction();
         mResults.get(position).deleteFromRealm();
+        Events.events_collection.remove(position);
         realm.commitTransaction();
         notifyItemRemoved(position);
     }

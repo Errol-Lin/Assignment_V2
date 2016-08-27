@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import s3534890.com.eventplanner.Model.Events;
 import s3534890.com.eventplanner.R;
 
 /**
@@ -47,10 +48,10 @@ public class CalendarAdapter extends BaseAdapter {
     private ArrayList<String> items;
     public static List<String> day_string;
     private View previousView;
-    public ArrayList<CalendarCollection>  date_collection_arr;
+    public ArrayList<Events> events_collection;
 
-    public CalendarAdapter(Context context, GregorianCalendar monthCalendar,ArrayList<CalendarCollection> date_collection_arr) {
-        this.date_collection_arr=date_collection_arr;
+    public CalendarAdapter(Context context, GregorianCalendar monthCalendar,ArrayList<Events> events_collection) {
+        this.events_collection=events_collection;
         CalendarAdapter.day_string = new ArrayList<String>();
         Locale.setDefault(Locale.US);
         month = monthCalendar;
@@ -232,10 +233,11 @@ public class CalendarAdapter extends BaseAdapter {
 
     public void setEventView(View v,int pos,TextView txt){
 
-        int len=CalendarCollection.date_collection_arr.size();
+        int len=events_collection.size();
         for (int i = 0; i < len; i++) {
-            CalendarCollection cal_obj=CalendarCollection.date_collection_arr.get(i);
-            String date=cal_obj.date;
+            Events cal_obj=Events.events_collection.get(i);
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            String date=df.format(cal_obj.getStartDate());
             int len1=day_string.size();
             if (len1>pos) {
 
@@ -253,13 +255,13 @@ public class CalendarAdapter extends BaseAdapter {
 
 
     public void getPositionList(String date,final Activity act){
-
-        int len=CalendarCollection.date_collection_arr.size();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        int len=Events.events_collection.size();
         for (int i = 0; i < len; i++) {
-            CalendarCollection cal_collection=CalendarCollection.date_collection_arr.get(i);
-            String event_date=cal_collection.date;
+            Events event =Events.events_collection.get(i);
+            String event_date=df.format(event.getStartDate());
 
-            String event_message=cal_collection.event_message;
+            String event_message=event.getEventName();
 
             if (date.equals(event_date)) {
 

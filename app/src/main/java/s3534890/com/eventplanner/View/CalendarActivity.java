@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.GregorianCalendar;
 
 import s3534890.com.eventplanner.Controller.CalendarAdapter;
-import s3534890.com.eventplanner.Controller.CalendarCollection;
+import s3534890.com.eventplanner.Model.Events;
 import s3534890.com.eventplanner.R;
 
 /**
@@ -30,7 +30,7 @@ public class CalendarActivity extends Activity {
 
         cal_month = (GregorianCalendar) GregorianCalendar.getInstance();
         cal_mont_copy = (GregorianCalendar) cal_month.clone();
-        cal_adapter = new CalendarAdapter(this,cal_month, CalendarCollection.date_collection_arr);
+        cal_adapter = new CalendarAdapter(this,cal_month, Events.events_collection);
 
         tv_month = (TextView)findViewById(R.id.tv_month);
         tv_month.setText(android.text.format.DateFormat.format("MMMM yyyy",cal_month));

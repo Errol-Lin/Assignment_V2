@@ -1,5 +1,6 @@
 package s3534890.com.eventplanner.View;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -20,6 +21,7 @@ import s3534890.com.eventplanner.R;
  */
 public class DetailViewDialog extends DialogFragment {
 
+    private Button viewButton;
     private Button doneButton;
     private TextView title;
     private TextView startDate;
@@ -32,13 +34,6 @@ public class DetailViewDialog extends DialogFragment {
     private TextView attendee;
     private int position;
 
-    private View.OnClickListener buttonClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-                dismiss();
-        }
-    };
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,6 +43,7 @@ public class DetailViewDialog extends DialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        viewButton = (Button) view.findViewById(R.id.view_detail_view_button);
         doneButton = (Button) view.findViewById(R.id.view_detail_done_button);
         title = (TextView) view.findViewById(R.id.view_detail_title);
         startDate = (TextView) view.findViewById(R.id.view_detail_start_date);
@@ -76,6 +72,18 @@ public class DetailViewDialog extends DialogFragment {
         note.setText("Notes: " + RecyclerViewAdapter.mResults.get(position).getNotes().toString());
         attendee.setText("Attendees: " + RecyclerViewAdapter.mResults.get(position).getAttendees().toString());
 
-        doneButton.setOnClickListener(buttonClickListener);
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
+        viewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(view.getContext(),CalendarActivity.class));
+                dismiss();
+            }
+        });
     }
 }

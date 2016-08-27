@@ -1,5 +1,7 @@
 package s3534890.com.eventplanner.Model;
 
+import java.util.ArrayList;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -20,6 +22,7 @@ public class Events extends RealmObject{
     private String location;
     private String notes;
     private String attendees;
+    public static ArrayList<Events> events_collection;
 
     public Events() {}
 

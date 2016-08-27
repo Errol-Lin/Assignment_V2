@@ -31,7 +31,6 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import s3534890.com.eventplanner.Controller.CalendarCollection;
 import s3534890.com.eventplanner.Controller.DatePickerController;
 import s3534890.com.eventplanner.Controller.DetailViewListener;
 import s3534890.com.eventplanner.Controller.RecyclerViewAdapter;
@@ -94,7 +93,7 @@ public class MainActivity extends AppCompatActivity{
                 }
             });
         }
-        CalendarCollection.date_collection_arr = new ArrayList<>();
+        Events.events_collection = new ArrayList<>();
 
         // construct the realm db
         realm = Realm.getDefaultInstance();

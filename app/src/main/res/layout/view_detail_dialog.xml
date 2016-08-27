@@ -78,9 +78,17 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/view_detail_done_button"
+        android:id="@+id/view_detail_view_button"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/view_detail_attendee"
-        android:text="Done"/>
+        android:text="View In Calendar"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/view_detail_done_button"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/view_detail_view_button"
+        android:text="Close"/>
 
 </RelativeLayout>
