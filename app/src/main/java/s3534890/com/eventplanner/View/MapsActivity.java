@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import s3534890.com.eventplanner.Controller.Networking;
 import s3534890.com.eventplanner.Controller.RecyclerViewAdapter;
 import s3534890.com.eventplanner.R;
 
@@ -55,15 +56,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         eventPosition = new LatLng(Double.valueOf(token.nextToken()),Double.valueOf(token.nextToken()));
         venue = extra.getString("venue");
 
-
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
-
-
 
         if (location != null) {
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 40));
@@ -81,6 +79,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .position(eventPosition)
                     .title(venue)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+
+            // send HTTP POST request for distance
+            String currentLocation = String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude());
+            new Networking(this,currentLocation,latlng).execute();
         }else{
             Toast.makeText(MapsActivity.this, "Null Location", Toast.LENGTH_SHORT).show();
         }
