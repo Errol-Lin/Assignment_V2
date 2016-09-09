@@ -8,6 +8,7 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 import s3534890.com.eventplanner.R;
+import s3534890.com.eventplanner.View.DetailViewDialog;
 import s3534890.com.eventplanner.View.MainActivity;
 
 /**
@@ -26,7 +27,13 @@ public class TimePickerController implements View.OnClickListener {
                 TimePickerDialog timePickerDialog1 = new TimePickerDialog(view.getContext(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                        MainActivity.startTime.setText(i + ":" + i1);
+                        if(MainActivity.startTime != null){
+                            MainActivity.startTime.setText(i + ":" + i1);
+                        }
+                        if(DetailViewDialog.editStartTime != null){
+                            DetailViewDialog.editStartTime.setText(i + ":" + i1);
+                        }
+
                     }
                 },mHour,mMinute,false);
                 timePickerDialog1.setTitle("Select Time");
@@ -36,7 +43,13 @@ public class TimePickerController implements View.OnClickListener {
                 TimePickerDialog timePickerDialog2 = new TimePickerDialog(view.getContext(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                        MainActivity.endTime.setText(i + ":" + i1);
+                        if(MainActivity.endTime != null){
+                            MainActivity.endTime.setText(i + ":" + i1);
+                        }
+                        if(DetailViewDialog.editEndTime != null){
+                            DetailViewDialog.editEndTime.setText(i + ":" + i1);
+                        }
+
                     }
                 },mHour,mMinute,false);
                 timePickerDialog2.setTitle("Select Time");

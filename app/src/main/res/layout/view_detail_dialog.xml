@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="30dp">
+    android:padding="30dp"
+    android:background="#4A8E79BB"
+    >
 
     <TextView
         android:layout_width="match_parent"
@@ -75,20 +77,45 @@
         android:textSize="15sp"
         android:layout_below="@id/view_detail_note"/>
 
+    <!--<fragment-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="200dp"-->
+        <!--android:layout_below="@+id/view_detail_attendee"-->
+        <!--class="com.google.android.gms.maps.MapFragment"-->
+        <!--android:id="@+id/view_detail_map"></fragment>-->
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/view_detail_edit_button"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/view_detail_attendee"
+        android:text="Edit Event"/>
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/view_detail_view_button"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/view_detail_attendee"
+        android:layout_below="@id/view_detail_edit_button"
         android:text="View In Calendar"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/view_detail_map_button"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/view_detail_view_button"
+        android:text="View In Map"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/view_detail_done_button"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/view_detail_view_button"
+        android:layout_below="@id/view_detail_map_button"
         android:text="Close"/>
+
+
 
 </RelativeLayout>

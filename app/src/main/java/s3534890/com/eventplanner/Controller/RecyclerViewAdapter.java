@@ -42,7 +42,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.realm = realm;
         detailListener = listener;
         update(results);
-
     }
 
     @Override

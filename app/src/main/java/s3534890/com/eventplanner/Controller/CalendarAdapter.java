@@ -255,21 +255,22 @@ public class CalendarAdapter extends BaseAdapter {
 
 
     public void getPositionList(String date,final Activity act){
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat df2 = new SimpleDateFormat("d/M/yy");
         int len=Events.events_collection.size();
         for (int i = 0; i < len; i++) {
             Events event =Events.events_collection.get(i);
-            String event_date=df.format(event.getStartDate());
+            String event_date=df1.format(event.getStartDate());
 
             String event_message=event.getEventName();
 
             if (date.equals(event_date)) {
-
-                Toast.makeText(context, "You have event on this date: "+event_date, Toast.LENGTH_LONG).show();
                 new AlertDialog.Builder(context)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Date: "+event_date)
-                        .setMessage("Event: "+event_message)
+                        .setCancelable(false)
+                        .setTitle("Event: "+event_message)
+                        .setMessage("Start Date: "+df2.format(event.getStartDate()) + "\n" + "Start Time: " + event.getStartTime() + "\n"
+                                    + "End Date: " + event.getEndDate() + "\n" + "End Time: " + event.getEndTime() + "\n" + "Venue: " +
+                                    event.getVenue() + "\n" + "Notes: " + event.getNotes() + "\n" + "Attendees: " + event.getAttendees())
                         .setPositiveButton("OK",new android.content.DialogInterface.OnClickListener(){
                             public void onClick(DialogInterface dialog, int which) {
                                 act.finish();

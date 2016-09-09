@@ -10,6 +10,7 @@ import android.widget.TextView;
 import java.util.Calendar;
 
 import s3534890.com.eventplanner.R;
+import s3534890.com.eventplanner.View.DetailViewDialog;
 import s3534890.com.eventplanner.View.MainActivity;
 
 /**
@@ -31,7 +32,12 @@ public class DatePickerController implements View.OnClickListener {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                         i1 = i1 + 1;
-                        MainActivity.startDate.setText(" " + i2 + "/" + i1 + "/" + i);
+                        if(MainActivity.startDate != null) {
+                            MainActivity.startDate.setText(" " + i2 + "/" + i1 + "/" + i);
+                        }
+                        if(DetailViewDialog.editStartDate != null) {
+                            DetailViewDialog.editStartDate.setText(" " + i2 + "/" + i1 + "/" + i);
+                        }
                     }
                 },mYear,mMonth,mDay);
                 datePicker1.setTitle("Select Date");
@@ -42,7 +48,12 @@ public class DatePickerController implements View.OnClickListener {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                         i1 = i1 + 1;
-                        MainActivity.endDate.setText(" " + i2 + "/" + i1 + "/" + i);
+                        if(MainActivity.endDate != null) {
+                            MainActivity.endDate.setText(" " + i2 + "/" + i1 + "/" + i);
+                        }
+                        if(DetailViewDialog.editEndDate != null) {
+                            DetailViewDialog.editEndDate.setText(" " + i2 + "/" + i1 + "/" + i);
+                        }
                     }
                 },mYear,mMonth,mDay);
                 datePicker2.setTitle("Select Date");

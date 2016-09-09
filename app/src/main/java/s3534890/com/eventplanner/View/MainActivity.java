@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity{
     private RealmResults<Events> mResults;
     private SimpleTouchCallBack mSimpleTouchCallBack;
     private ItemTouchHelper mItemTouchHelper;
-    private static final LatLngBounds BOUNDS = new LatLngBounds(new LatLng(-37.811569,144.960870),new LatLng(-37.806972,144.965814));
+    public static final LatLngBounds BOUNDS = new LatLngBounds(new LatLng(-37.811569,144.960870),new LatLng(-37.806972,144.965814));
 
 
     private RealmChangeListener realmChangeListener = new RealmChangeListener() {
@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity{
                 }
             });
         }
+
         Events.events_collection = new ArrayList<>();
 
         // construct the realm db
@@ -169,13 +170,6 @@ public class MainActivity extends AppCompatActivity{
             venue.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-//                    AlertDialog.Builder builder2 = new AlertDialog.Builder(view.getContext());
-//                    View mapview = LayoutInflater.from(view.getContext()).inflate(R.layout.map_layout,null);
-//                    builder2.setView(mapview);
-//                    builder2.create().show();
-//
-//                    Toast.makeText(view.getContext(),"venue pressed",Toast.LENGTH_LONG).show();
                     try{
                         PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
                         intentBuilder.setLatLngBounds(BOUNDS);
@@ -193,7 +187,8 @@ public class MainActivity extends AppCompatActivity{
                 }
             });
 
-            builder.setMessage("Add New Event");
+            builder.setTitle("Add New Event");
+            builder.setCancelable(false);
             builder.setView(dialogView);
             builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
                 @Override
@@ -209,18 +204,30 @@ public class MainActivity extends AppCompatActivity{
                     String loc = location.getText().toString();
                     long added = System.currentTimeMillis();
                     Calendar calendar = Calendar.getInstance();
-                    StringTokenizer token = new StringTokenizer(startD,"/");
-                    calendar.set(Calendar.DAY_OF_MONTH,Integer.valueOf(token.nextToken().trim()));
-                    calendar.set(Calendar.MONTH,Integer.valueOf(token.nextToken())-1);
-                    calendar.set(Calendar.YEAR,Integer.valueOf(token.nextToken()));
 
-
-
-                    Events newEvent = new Events(UUID.randomUUID().toString().replaceAll("-",""),added,title,calendar.getTimeInMillis(),att,note,endD,startT,endT,vne,loc);
-                    realm.beginTransaction();
-                    realm.copyToRealm(newEvent);
-                    realm.commitTransaction();
-                    clearAll();
+                    if(title.equals("") || startD.isEmpty() || startT.isEmpty() || endD.isEmpty() || endT.isEmpty() || note.isEmpty()
+                            || att.isEmpty() || vne.isEmpty() || loc.isEmpty()){
+                        new AlertDialog.Builder(builder.getContext())
+                                .setTitle("Alert")
+                                .setMessage("All fields are required.")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.cancel();
+                                    }
+                                }).show();
+                    }else{
+                        StringTokenizer token = new StringTokenizer(startD,"/");
+                        calendar.set(Calendar.DAY_OF_MONTH,Integer.valueOf(token.nextToken().trim()));
+                        calendar.set(Calendar.MONTH,Integer.valueOf(token.nextToken())-1);
+                        calendar.set(Calendar.YEAR,Integer.valueOf(token.nextToken()));
+                        // create new event
+                        Events newEvent = new Events(UUID.randomUUID().toString().replaceAll("-",""),added,title,calendar.getTimeInMillis(),att,note,endD,startT,endT,vne,loc);
+                        realm.beginTransaction();
+                        realm.copyToRealm(newEvent);
+                        realm.commitTransaction();
+                        clearAll();
+                    }
                 }
             });
             builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -235,6 +242,7 @@ public class MainActivity extends AppCompatActivity{
             if(dialogView.getParent() != null){
                 ((ViewGroup)dialogView.getParent()).removeView(dialogView);
             }
+            clearAll();
             alert.show();
             return true;
         }else if(id == R.id.menu_sorting_asc){
@@ -259,6 +267,7 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
         if(resultCode == RESULT_OK){
             switch (requestCode){
                 case 1:
