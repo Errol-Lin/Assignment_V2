@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.GregorianCalendar;
 
-import s3534890.com.eventplanner.Controller.CalendarAdapter;
+import s3534890.com.eventplanner.Controller.Calendar.CalendarAdapter;
 import s3534890.com.eventplanner.Model.Events;
 import s3534890.com.eventplanner.R;
 

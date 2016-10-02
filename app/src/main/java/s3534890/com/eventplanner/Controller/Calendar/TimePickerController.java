@@ -1,4 +1,4 @@
-package s3534890.com.eventplanner.Controller;
+package s3534890.com.eventplanner.Controller.Calendar;
 
 import android.app.TimePickerDialog;
 import android.view.View;

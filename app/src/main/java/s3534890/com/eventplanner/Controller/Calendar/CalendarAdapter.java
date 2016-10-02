@@ -1,4 +1,4 @@
-package s3534890.com.eventplanner.Controller;
+package s3534890.com.eventplanner.Controller.Calendar;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -99,7 +98,6 @@ public class CalendarAdapter extends BaseAdapter {
 
         }
 
-
         dayView = (TextView) v.findViewById(R.id.date);
         String[] separatedTime = day_string.get(position).split("-");
 
@@ -117,7 +115,6 @@ public class CalendarAdapter extends BaseAdapter {
             // setting curent month's days in blue color.
             dayView.setTextColor(Color.WHITE);
         }
-
 
         if (day_string.get(position).equals(curentDateString)) {
 
@@ -139,15 +136,6 @@ public class CalendarAdapter extends BaseAdapter {
         if (monthStr.length() == 1) {
             monthStr = "0" + monthStr;
         }
-
-        // show icon if date is not empty and it exists in the items array
-        /*ImageView iw = (ImageView) v.findViewById(R.id.date_icon);
-        if (date.length() > 0 && items != null && items.contains(date)) {
-            iw.setVisibility(View.VISIBLE);
-        } else {
-            iw.setVisibility(View.GONE);
-        }
-        */
 
         setEventView(v, position,dayView);
 
@@ -237,7 +225,7 @@ public class CalendarAdapter extends BaseAdapter {
         for (int i = 0; i < len; i++) {
             Events cal_obj=Events.events_collection.get(i);
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            String date=df.format(cal_obj.getStartDate());
+            String date=df.format(cal_obj.getWhen());
             int len1=day_string.size();
             if (len1>pos) {
 
@@ -256,11 +244,10 @@ public class CalendarAdapter extends BaseAdapter {
 
     public void getPositionList(String date,final Activity act){
         SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat df2 = new SimpleDateFormat("d/M/yy");
         int len=Events.events_collection.size();
         for (int i = 0; i < len; i++) {
             Events event =Events.events_collection.get(i);
-            String event_date=df1.format(event.getStartDate());
+            String event_date=df1.format(event.getWhen());
 
             String event_message=event.getEventName();
 
@@ -268,7 +255,7 @@ public class CalendarAdapter extends BaseAdapter {
                 new AlertDialog.Builder(context)
                         .setCancelable(false)
                         .setTitle("Event: "+event_message)
-                        .setMessage("Start Date: "+df2.format(event.getStartDate()) + "\n" + "Start Time: " + event.getStartTime() + "\n"
+                        .setMessage("Start Date: "+event.getStartDate() + "\n" + "Start Time: " + event.getStartTime() + "\n"
                                     + "End Date: " + event.getEndDate() + "\n" + "End Time: " + event.getEndTime() + "\n" + "Venue: " +
                                     event.getVenue() + "\n" + "Notes: " + event.getNotes() + "\n" + "Attendees: " + event.getAttendees())
                         .setPositiveButton("OK",new android.content.DialogInterface.OnClickListener(){

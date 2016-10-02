@@ -33,7 +33,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String venue;
     private String latlng;
     private Location location;
-
+    private String currentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        // to get the current location
+//        // to get the current location
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mCriteria = new Criteria();
         location = mLocationManager.getLastKnownLocation(mLocationManager.getBestProvider(mCriteria, false));
@@ -55,7 +55,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         StringTokenizer token = new StringTokenizer(latlng,",");
         eventPosition = new LatLng(Double.valueOf(token.nextToken()),Double.valueOf(token.nextToken()));
         venue = extra.getString("venue");
-
     }
 
     @Override
@@ -81,11 +80,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
             // send HTTP POST request for distance
-            String currentLocation = String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude());
+            currentLocation = String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude());
             new Networking(this,currentLocation,latlng).execute();
         }else{
             Toast.makeText(MapsActivity.this, "Null Location", Toast.LENGTH_SHORT).show();
         }
     }
-
 }

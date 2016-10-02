@@ -14,7 +14,7 @@ public class Events extends RealmObject{
     private String id;
     private long added;
     private String eventName;
-    private long startDate;
+    private String startDate;
     private String startTime;
     private String endDate;
     private String endTime;
@@ -22,13 +22,16 @@ public class Events extends RealmObject{
     private String location;
     private String notes;
     private String attendees;
+    private long when;
     public static ArrayList<Events> events_collection;
 
     public Events() {}
 
-    public Events(String id, long added, String eventName, long startDate, String attendees, String notes, String endDate, String startTime, String endTime, String venue,String location) {
+    public Events(String id, long added, long when, String eventName, String startDate, String startTime, String endDate, String
+            endTime, String venue, String location, String attendees,String notes) {
         this.id = id;
         this.added = added;
+        this.when = when;
         this.eventName = eventName;
         this.startDate = startDate;
         this.attendees = attendees;
@@ -48,6 +51,14 @@ public class Events extends RealmObject{
         this.added = added;
     }
 
+    public long getWhen() {
+        return when;
+    }
+
+    public void setWhen(long when) {
+        this.when = when;
+    }
+
     public String getEventName() {
         return eventName;
     }
@@ -56,11 +67,11 @@ public class Events extends RealmObject{
         this.eventName = eventName;
     }
 
-    public long getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(long startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 

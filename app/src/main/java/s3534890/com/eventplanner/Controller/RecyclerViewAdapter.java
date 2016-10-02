@@ -1,6 +1,5 @@
 package s3534890.com.eventplanner.Controller;
 
-import android.app.usage.UsageEvents;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,13 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
+import s3534890.com.eventplanner.Controller.Interface.DetailViewListener;
+import s3534890.com.eventplanner.Controller.Interface.SwipeInterface;
 import s3534890.com.eventplanner.Model.Events;
 import s3534890.com.eventplanner.R;
 
@@ -56,11 +52,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(ListRowViewHolder holder, int position) {
         Events event = mResults.get(position);
-        Date date = new Date(event.getStartDate());
-        SimpleDateFormat df1 = new SimpleDateFormat("dd/MM/yyyy");
-        SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd");
         holder.eventTitle.setText(event.getEventName());
-        holder.startDate.setText(df1.format(date));
+        holder.startDate.setText(event.getStartDate());
         holder.startTime.setText("Start Time: " + event.getStartTime());
         holder.attendee.setText("Attendee: " + event.getAttendees());
         Events.events_collection.add(event);
@@ -88,7 +81,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public long getItemId(int position) {
         if(position< mResults.size()){
-            return mResults.get(position).getStartDate();
+            return mResults.get(position).getWhen();
         }
         return RecyclerView.NO_ID;
     }

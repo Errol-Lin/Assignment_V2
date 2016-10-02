@@ -42,11 +42,24 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyCd3lWjpkhMqyCtmdfOeB4sKq1Gjkz4UFU" />
+            android:value="AIzaSyBH3Lh8JVOL8iSyHM25KJeUM_7rS4udSH0" />
 
         <activity
             android:name=".View.MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps" />
+
+        <service
+            android:name=".Controller.Service.NotificationService"
+            android:exported="false" />
+
+        <receiver
+            android:name=".Controller.InternetConnectionReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

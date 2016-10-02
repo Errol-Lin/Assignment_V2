@@ -3,6 +3,8 @@ package s3534890.com.eventplanner.Controller;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
+import s3534890.com.eventplanner.Controller.Interface.SwipeInterface;
+
 /**
  * Created by Errol on 25/08/16.
  */

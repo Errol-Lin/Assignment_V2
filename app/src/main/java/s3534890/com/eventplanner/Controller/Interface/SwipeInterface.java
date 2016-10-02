@@ -1,4 +1,4 @@
-package s3534890.com.eventplanner.Controller;
+package s3534890.com.eventplanner.Controller.Interface;
 
 /**
  * Created by Errol on 25/08/16.

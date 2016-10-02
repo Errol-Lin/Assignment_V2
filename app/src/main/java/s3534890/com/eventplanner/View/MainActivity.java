@@ -1,19 +1,32 @@
 package s3534890.com.eventplanner.View;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
@@ -21,21 +34,30 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.StringTokenizer;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import s3534890.com.eventplanner.Controller.DatePickerController;
-import s3534890.com.eventplanner.Controller.DetailViewListener;
+import s3534890.com.eventplanner.Controller.Calendar.DatePickerController;
+import s3534890.com.eventplanner.Controller.EventCheck;
+import s3534890.com.eventplanner.Controller.Helpers;
+import s3534890.com.eventplanner.Controller.Interface.DetailViewListener;
+import s3534890.com.eventplanner.Controller.InternetConnectionReceiver;
+import s3534890.com.eventplanner.Controller.Networking;
 import s3534890.com.eventplanner.Controller.RecyclerViewAdapter;
+import s3534890.com.eventplanner.Controller.SQLHelper;
+import s3534890.com.eventplanner.Controller.Service.NotificationService;
 import s3534890.com.eventplanner.Controller.SimpleTouchCallBack;
-import s3534890.com.eventplanner.Controller.TimePickerController;
+import s3534890.com.eventplanner.Controller.Calendar.TimePickerController;
 import s3534890.com.eventplanner.Model.Events;
 import s3534890.com.eventplanner.R;
 
@@ -46,7 +68,7 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements InternetConnectionReceiver.ConnectivityReceiverListener{
 
     private AlertDialog.Builder builder;
     private View dialogView;
@@ -62,11 +84,20 @@ public class MainActivity extends AppCompatActivity{
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private Realm realm;
+    private SQLHelper sqlHelper;
+    private SQLiteDatabase sqLiteDatabase;
+    private ContentValues contentValues;
     private RecyclerViewAdapter mAdapter;
     private RealmResults<Events> mResults;
     private SimpleTouchCallBack mSimpleTouchCallBack;
     private ItemTouchHelper mItemTouchHelper;
     public static final LatLngBounds BOUNDS = new LatLngBounds(new LatLng(-37.811569,144.960870),new LatLng(-37.806972,144.965814));
+    private AlarmManager alarmManager;
+    public static String currentLocation;
+    LocationManager mLocationManager;
+    Criteria mCriteria;
+    Location mLocation;
+    PendingIntent pendingIntent;
 
 
     private RealmChangeListener realmChangeListener = new RealmChangeListener() {
@@ -94,6 +125,8 @@ public class MainActivity extends AppCompatActivity{
             });
         }
 
+//        sqlHelper = new SQLHelper(this);
+//        sqLiteDatabase = sqlHelper.getWritableDatabase();
         Events.events_collection = new ArrayList<>();
 
         // construct the realm db
@@ -123,6 +156,30 @@ public class MainActivity extends AppCompatActivity{
         // construct dialog view
         dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_view,null);
         builder = new AlertDialog.Builder(this);
+
+        // to get the current location
+        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        mCriteria = new Criteria();
+        mLocation = mLocationManager.getLastKnownLocation(mLocationManager.getBestProvider(mCriteria, false));
+        if(mLocation != null){
+            currentLocation = String.valueOf(mLocation.getLatitude()) + "," + String.valueOf(mLocation.getLongitude());
+        }else{
+            currentLocation = "-37.8078,144.963";
+        }
+
+        // construct the alarm manager
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(this, NotificationService.class);
+        pendingIntent = PendingIntent.getService(this,3,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,1000,40000,pendingIntent);
+
+        checkInternetConnection();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        Helpers.getInstance().setConnectivityListener(this);
     }
 
     @Override
@@ -205,11 +262,11 @@ public class MainActivity extends AppCompatActivity{
                     long added = System.currentTimeMillis();
                     Calendar calendar = Calendar.getInstance();
 
-                    if(title.equals("") || startD.isEmpty() || startT.isEmpty() || endD.isEmpty() || endT.isEmpty() || note.isEmpty()
-                            || att.isEmpty() || vne.isEmpty() || loc.isEmpty()){
+                    if(title.equals("") || startD.isEmpty() || startT.isEmpty() || endD.isEmpty() || endT.isEmpty() || note.isEmpty() || att.isEmpty() || vne.isEmpty() || loc.isEmpty()){
                         new AlertDialog.Builder(builder.getContext())
                                 .setTitle("Alert")
                                 .setMessage("All fields are required.")
+                                .setCancelable(false)
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -217,12 +274,45 @@ public class MainActivity extends AppCompatActivity{
                                     }
                                 }).show();
                     }else{
+                        // convert event start date and time into Long
                         StringTokenizer token = new StringTokenizer(startD,"/");
+                        StringTokenizer token2 = new StringTokenizer(startT,":");
                         calendar.set(Calendar.DAY_OF_MONTH,Integer.valueOf(token.nextToken().trim()));
                         calendar.set(Calendar.MONTH,Integer.valueOf(token.nextToken())-1);
                         calendar.set(Calendar.YEAR,Integer.valueOf(token.nextToken()));
+                        calendar.set(Calendar.HOUR_OF_DAY,Integer.valueOf(token2.nextToken().trim()));
+                        calendar.set(Calendar.MINUTE,Integer.valueOf(token2.nextToken().trim()));
+
+                        for(Events events : RecyclerViewAdapter.mResults){
+                            if(events.getWhen() > System.currentTimeMillis()){
+                                String time = "";
+                                try {
+                                    time = String.valueOf(new EventCheck(events.getLocation(),loc).execute().get());
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                } catch (ExecutionException e) {
+                                    e.printStackTrace();
+                                }
+
+                                if(TimeUnit.MILLISECONDS.toMinutes(Math.abs(events.getWhen() - calendar.getTimeInMillis())) < Long.valueOf(time)){
+                                    new AlertDialog.Builder(builder.getContext())
+                                            .setTitle("Alert")
+                                            .setMessage("Time conflict with event: " + events.getEventName() + ", the driving time between these two events is: " + time + " minutes.")
+                                            .setPositiveButton("Got it.", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    dialogInterface.cancel();
+                                                }
+                                            }).show();
+                                }
+                            }
+                        }
+
                         // create new event
-                        Events newEvent = new Events(UUID.randomUUID().toString().replaceAll("-",""),added,title,calendar.getTimeInMillis(),att,note,endD,startT,endT,vne,loc);
+                        Events newEvent = new Events(UUID.randomUUID().toString().replaceAll("-",""),added,calendar.getTimeInMillis(),title,startD,startT,endD,endT,vne,loc,att,note);
+
+//                        sqlHelper.insert(UUID.randomUUID().toString().replaceAll("-",""),title,added,calendar.getTimeInMillis(),startT,endD,endT,vne,loc,att,note);
+
                         realm.beginTransaction();
                         realm.copyToRealm(newEvent);
                         realm.commitTransaction();
@@ -246,11 +336,11 @@ public class MainActivity extends AppCompatActivity{
             alert.show();
             return true;
         }else if(id == R.id.menu_sorting_asc){
-            mResults = realm.where(Events.class).findAllSortedAsync("startDate");
+            mResults = realm.where(Events.class).findAllSortedAsync("when");
             mResults.addChangeListener(realmChangeListener);
             return true;
         }else if(id == R.id.menu_sorting_desc){
-            mResults = realm.where(Events.class).findAllSortedAsync("startDate", Sort.DESCENDING);
+            mResults = realm.where(Events.class).findAllSortedAsync("when", Sort.DESCENDING);
             mResults.addChangeListener(realmChangeListener);
             return true;
         }else if(id == R.id.menu_view_in_calendar){
@@ -330,5 +420,31 @@ public class MainActivity extends AppCompatActivity{
         dialog.show(getSupportFragmentManager(),"Detail");
     }
 
+    public void showInternetInfo(boolean isConnected){
+        String message;
+        if(isConnected){
+            message = "Internet Connection Established. Checking Events Status.";
+        }else {
+            message = "Internet Connection Lost.";
+        }
 
+        Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+    }
+
+    public void checkInternetConnection(){
+        boolean isConnected = InternetConnectionReceiver.isConnected();
+        showInternetInfo(isConnected);
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected){
+        showInternetInfo(isConnected);
+        if(isConnected){
+            try {
+                pendingIntent.send();
+            } catch (PendingIntent.CanceledException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

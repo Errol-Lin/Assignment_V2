@@ -1,7 +1,6 @@
 package s3534890.com.eventplanner.View;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,26 +17,25 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.StringTokenizer;
+import java.util.concurrent.ExecutionException;
 
 import io.realm.Realm;
-import s3534890.com.eventplanner.Controller.DatePickerController;
+import s3534890.com.eventplanner.Controller.Calendar.DatePickerController;
+import s3534890.com.eventplanner.Controller.Geocoding;
+import s3534890.com.eventplanner.Controller.Helpers;
 import s3534890.com.eventplanner.Controller.RecyclerViewAdapter;
-import s3534890.com.eventplanner.Controller.TimePickerController;
+import s3534890.com.eventplanner.Controller.Calendar.TimePickerController;
 import s3534890.com.eventplanner.R;
 
 /**
@@ -46,7 +43,7 @@ import s3534890.com.eventplanner.R;
  */
 public class DetailViewDialog extends DialogFragment{
 
-    private Button viewButton,doneButton,editButton,mapButton;
+    private Button viewButton,doneButton,editButton,mapButton,trafficButton;
     private TextView title;
     private TextView startDate;
     private TextView startTime;
@@ -75,6 +72,7 @@ public class DetailViewDialog extends DialogFragment{
         doneButton = (Button) view.findViewById(R.id.view_detail_done_button);
         editButton = (Button) view.findViewById(R.id.view_detail_edit_button);
         mapButton = (Button) view.findViewById(R.id.view_detail_map_button);
+        trafficButton = (Button) view.findViewById(R.id.view_detail_traffic_button);
         title = (TextView) view.findViewById(R.id.view_detail_title);
         startDate = (TextView) view.findViewById(R.id.view_detail_start_date);
         startTime= (TextView) view.findViewById(R.id.view_detail_start_time);
@@ -93,10 +91,8 @@ public class DetailViewDialog extends DialogFragment{
             position = arguments.getInt("POSITION");
         }
 
-        final Date date = new Date(RecyclerViewAdapter.mResults.get(position).getStartDate());
-        SimpleDateFormat df = new SimpleDateFormat("d/M/yy");
         title.setText("Title: " + RecyclerViewAdapter.mResults.get(position).getEventName());
-        startDate.setText("Start Date: " + df.format(date));
+        startDate.setText("Start Date: " + RecyclerViewAdapter.mResults.get(position).getStartDate());
         startTime.setText("Start Time: " + RecyclerViewAdapter.mResults.get(position).getStartTime());
         endDate.setText("End Date: " + RecyclerViewAdapter.mResults.get(position).getEndDate());
         endTime.setText("End Time: " + RecyclerViewAdapter.mResults.get(position).getEndTime());
@@ -128,10 +124,27 @@ public class DetailViewDialog extends DialogFragment{
             }
         });
 
+        trafficButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+                String eventLocation,current = "Null";
+
+                try {
+                    eventLocation = String.valueOf(new Geocoding(RecyclerViewAdapter.mResults.get(position).getLocation()).execute().get());
+                    current = String.valueOf(new Geocoding(MainActivity.currentLocation).execute().get());
+                    Helpers.showAlertDialog(view.getContext(),"Traffic Volume",eventLocation + " " + current,"OK");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SimpleDateFormat df2 = new SimpleDateFormat("d/M/yyyy");
                 builder.setTitle("Edit Event");
                 builder.setCancelable(false);
                 builder.setView(dialogView);
@@ -152,7 +165,7 @@ public class DetailViewDialog extends DialogFragment{
                 editEndTime.setOnClickListener(new TimePickerController());
 
                 editTitle.setText(RecyclerViewAdapter.mResults.get(position).getEventName());
-                editStartDate.setText(df2.format(date));
+                editStartDate.setText(RecyclerViewAdapter.mResults.get(position).getStartDate());
                 editStartTime.setText(RecyclerViewAdapter.mResults.get(position).getStartTime());
                 editEndDate.setText(RecyclerViewAdapter.mResults.get(position).getEndDate());
                 editEndTime.setText(RecyclerViewAdapter.mResults.get(position).getEndTime());
@@ -209,13 +222,17 @@ public class DetailViewDialog extends DialogFragment{
                                     }).show();
                         }else{
                             StringTokenizer token = new StringTokenizer(startD,"/");
+                            StringTokenizer token2 = new StringTokenizer(startT,":");
                             calendar.set(Calendar.DAY_OF_MONTH,Integer.valueOf(token.nextToken().trim()));
                             calendar.set(Calendar.MONTH,Integer.valueOf(token.nextToken())-1);
                             calendar.set(Calendar.YEAR,Integer.valueOf(token.nextToken()));
+                            calendar.set(Calendar.HOUR_OF_DAY,Integer.valueOf(token2.nextToken().trim()));
+                            calendar.set(Calendar.MINUTE,Integer.valueOf(token2.nextToken().trim()));
 
                             realm.beginTransaction();
+                            RecyclerViewAdapter.mResults.get(position).setWhen(calendar.getTimeInMillis());
                             RecyclerViewAdapter.mResults.get(position).setEventName(title);
-                            RecyclerViewAdapter.mResults.get(position).setStartDate(calendar.getTimeInMillis());
+                            RecyclerViewAdapter.mResults.get(position).setStartDate(startD);
                             RecyclerViewAdapter.mResults.get(position).setStartTime(startT);
                             RecyclerViewAdapter.mResults.get(position).setEndDate(endD);
                             RecyclerViewAdapter.mResults.get(position).setEndTime(endT);

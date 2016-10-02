@@ -1,4 +1,4 @@
-package s3534890.com.eventplanner.Controller;
+package s3534890.com.eventplanner.Controller.Calendar;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
