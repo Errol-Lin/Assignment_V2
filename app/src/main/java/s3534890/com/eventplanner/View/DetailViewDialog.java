@@ -1,6 +1,8 @@
 package s3534890.com.eventplanner.View;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -24,15 +26,13 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.concurrent.ExecutionException;
 
 import io.realm.Realm;
 import s3534890.com.eventplanner.Controller.Calendar.DatePickerController;
-import s3534890.com.eventplanner.Controller.Geocoding;
+import s3534890.com.eventplanner.Controller.AsyncTask.Geocoding;
 import s3534890.com.eventplanner.Controller.Helpers;
 import s3534890.com.eventplanner.Controller.RecyclerViewAdapter;
 import s3534890.com.eventplanner.Controller.Calendar.TimePickerController;
@@ -128,12 +128,20 @@ public class DetailViewDialog extends DialogFragment{
             @Override
             public void onClick(View view) {
                 dismiss();
-                String eventLocation,current = "Null";
+                String eventLocation;
+                ClipData clip;
+                Calendar now = Calendar.getInstance();
+                String hour = String.valueOf(now.get(Calendar.HOUR_OF_DAY));
+                String dow = String.valueOf(now.get(Calendar.DAY_OF_WEEK));
 
                 try {
-                    eventLocation = String.valueOf(new Geocoding(RecyclerViewAdapter.mResults.get(position).getLocation()).execute().get());
-                    current = String.valueOf(new Geocoding(MainActivity.currentLocation).execute().get());
-                    Helpers.showAlertDialog(view.getContext(),"Traffic Volume",eventLocation + " " + current,"OK");
+                    eventLocation = String.valueOf(new Geocoding(RecyclerViewAdapter.mResults.get(position).getLocation()).execute().get()).toUpperCase();
+                    String query = "SELECT HMGNS_LNK_DESC,_" + hour + ",FLOW,PERIOD_TYPE FROM [elite-chiller-144812:Traffic.Volume] WHERE HMGNS_LNK_DESC LIKE '_" + eventLocation + "%' AND PERIOD_TYPE CONTAINS 'SCHOOL' AND DAY_OF_WEEK = " + dow + " ORDER BY HMGNS_LNK_DESC LIMIT 5";
+
+                    clip = ClipData.newPlainText("text",query);
+                    MainActivity.clipboardManager.setPrimaryClip(clip);
+                    Intent intent = new Intent(view.getContext(),WebActivity.class);
+                    startActivity(intent);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (ExecutionException e) {

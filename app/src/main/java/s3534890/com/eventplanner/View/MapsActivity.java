@@ -17,11 +17,9 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.List;
 import java.util.StringTokenizer;
 
-import s3534890.com.eventplanner.Controller.Networking;
-import s3534890.com.eventplanner.Controller.RecyclerViewAdapter;
+import s3534890.com.eventplanner.Controller.AsyncTask.Networking;
 import s3534890.com.eventplanner.R;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {

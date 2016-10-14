@@ -1,8 +1,10 @@
-package s3534890.com.eventplanner.Controller;
+package s3534890.com.eventplanner.Controller.AsyncTask;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
+
+import s3534890.com.eventplanner.Controller.Helpers;
 
 /**
  * Created by Errol on 9/09/16.

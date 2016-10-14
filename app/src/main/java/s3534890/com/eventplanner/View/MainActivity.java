@@ -1,16 +1,14 @@
 package s3534890.com.eventplanner.View;
 
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ClipboardManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -19,14 +17,12 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
@@ -48,11 +44,10 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import s3534890.com.eventplanner.Controller.Calendar.DatePickerController;
-import s3534890.com.eventplanner.Controller.EventCheck;
+import s3534890.com.eventplanner.Controller.AsyncTask.EventCheck;
 import s3534890.com.eventplanner.Controller.Helpers;
 import s3534890.com.eventplanner.Controller.Interface.DetailViewListener;
 import s3534890.com.eventplanner.Controller.InternetConnectionReceiver;
-import s3534890.com.eventplanner.Controller.Networking;
 import s3534890.com.eventplanner.Controller.RecyclerViewAdapter;
 import s3534890.com.eventplanner.Controller.SQLHelper;
 import s3534890.com.eventplanner.Controller.Service.NotificationService;
@@ -98,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements InternetConnectio
     Criteria mCriteria;
     Location mLocation;
     PendingIntent pendingIntent;
+    public static ClipboardManager clipboardManager;
 
 
     private RealmChangeListener realmChangeListener = new RealmChangeListener() {
@@ -174,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements InternetConnectio
         alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,1000,40000,pendingIntent);
 
         checkInternetConnection();
+        clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
     }
 
     @Override

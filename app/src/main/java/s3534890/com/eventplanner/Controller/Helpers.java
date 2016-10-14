@@ -8,13 +8,24 @@ import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 
+//import com.google.cloud.bigquery.BigQuery;
+//import com.google.cloud.bigquery.BigQueryOptions;
+//import com.google.cloud.bigquery.FieldValue;
+//import com.google.cloud.bigquery.QueryRequest;
+//import com.google.cloud.bigquery.QueryResponse;
+//import com.google.cloud.bigquery.QueryResult;
+
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 
@@ -126,11 +137,6 @@ public class Helpers extends Application {
         return TimeUnit.MILLISECONDS.toMinutes(when - now);
     }
 
-    public static void showSnackbar(View v, String message){
-        Snackbar snackbar = Snackbar.make(v,message,Snackbar.LENGTH_LONG);
-        snackbar.show();
-    }
-
     public static String getAddressFromGoogleGeocode(String location){
         HttpURLConnection connection = null;
         URL url;
@@ -160,7 +166,7 @@ public class Helpers extends Application {
             address = addressObject.getString("formatted_address");
 
             String[] array = address.split(" ");
-            address = array[1] + " " + array[2];
+            address = array[1];
 
         }catch (Exception e){
 
@@ -182,4 +188,5 @@ public class Helpers extends Application {
             }
         }).show();
     }
+
 }
